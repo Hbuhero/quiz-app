@@ -6,7 +6,8 @@
 
 <template>
     <div class="card">
-        <img :src="quiz.img" alt="">
+      <RouterLink to="/testing"><img :src="quiz.img" alt=""></RouterLink>
+        
         <div class="card-text">
         <h2>{{quiz.name}}</h2>
         <p>{{ quiz.questions.length }} questions</p>
