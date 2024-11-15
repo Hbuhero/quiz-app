@@ -7,7 +7,7 @@
 
 <template>
     <div class="card">
-      <RouterLink :to="`/${quiz.id}/questions`"><img :src="quiz.img" alt=""></RouterLink>
+      <RouterLink :to="`/${quiz.id}/question/1`"><img :src="quiz.img" alt=""></RouterLink>
         
         <div class="card-text">
         <h2>{{quiz.name}}</h2>

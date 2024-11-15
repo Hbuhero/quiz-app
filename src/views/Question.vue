@@ -1,5 +1,5 @@
 <script setup>
-    import {useRoute, useRouter} from "vue-router";
+    import {RouterView, useRoute, useRouter} from "vue-router";
     import quizes from "../data/quizes.json"
     import { ref } from "vue";
 
@@ -18,8 +18,10 @@
     
 
     const subjectId = route.params.subjectId
+    let questionId = route.params.questionId
     const questions = quizes.find(quiz => quiz.id == parseInt(subjectId)).questions
     
+    console.log(questionId)
     const saveAnswer = (question, option) => {
         if (answers.value.find(answer => answer.questionId == question.id) === undefined){
             let selectedOption = ({
@@ -51,6 +53,13 @@
          
     }
 
+    const next = () => {
+        return router.push(`/${subjectId}/question/${questionId++}`)
+    }
+
+    const previous = () => {
+        
+    }
 </script>
 
 <template>
@@ -58,18 +67,13 @@
         <header>
             <p>Questions</p>
         </header>
-        <div class="questions-container">
-            <div class="question-card" v-for="question in questions">
-                <h1>{{ question.text }}</h1>
-                <div 
-                class="option-card" 
-                @click="saveAnswer(question, option)" v-for="option in question.options"
-                >
-                    <p>{{ option.label }}:    {{ option.text }}</p>
-                </div>
+            <RouterView />
+            <div class="buttons">
+                <button>Previous</button>
+                <button @click="next">Next</button>
             </div>
-        </div>
-        <button @click="submit">Submit</button>
+        
+        
         
     </main>
 </template>
@@ -90,12 +94,13 @@
         padding: 10px 0;
         background: #007bff; /* Blue background */
         color: #ffffff; /* White text */
-        border-radius: 8px 8px 0 0;
+        border-radius: 8px 8px 8px 8px;
     }
 
     header p {
         font-size: 24px;
         font-weight: bold;
+        ;
     }
 
     /* Questions container */
@@ -108,47 +113,7 @@
     }
 
     /* Question card */
-    .question-card {
-        width: 100%;
-        max-width: 500px;
-        background: #ffffff; /* White background */
-        border: 1px solid #dee2e6; /* Light border */
-        border-radius: 8px;
-        padding: 20px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-    }
-
-    .question-card h1 {
-        font-size: 18px;
-        color: #007bff; /* Blue text for questions */
-        margin-bottom: 15px;
-    }
-
-    /* Option card */
-    .option-card {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 10px 15px;
-        background: #f1f3f5; /* Light gray background for options */
-        margin-bottom: 10px;
-        border-radius: 4px;
-        border: 1px solid #e9ecef;
-    }
-
-    .option-card p {
-        margin: 0;
-        font-size: 14px;
-        color: #495057; /* Medium gray text */
-    }
-
-    /* Hover effects */
-    .option-card:hover {
-        background: #e9ecef; /* Slightly darker gray on hover */
-        cursor: pointer;
-        transform: scale(1.02);
-        transition: all 0.2s ease-in-out;
-    }
+    
 
     .option-card.clicked {
         background-color: #d1e7dd; /* Greenish color to indicate selection */
@@ -156,5 +121,27 @@
         box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
     }
 
-    
+    .buttons {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    button {
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #ffffff;
+  background-color: #007bff; /* Primary blue */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}    
 </style>
+
+<!-- 
+    create a question view that will route to a specific questions view using RouterView
+    the question links has to be children paths
+-->
