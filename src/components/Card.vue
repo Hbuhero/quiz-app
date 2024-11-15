@@ -2,11 +2,12 @@
     import { defineProps } from 'vue';
 
     const {quiz} = defineProps(['quiz'])
+    
 </script>
 
 <template>
     <div class="card">
-      <RouterLink to="/testing"><img :src="quiz.img" alt=""></RouterLink>
+      <RouterLink :to="`/${quiz.id}/questions`"><img :src="quiz.img" alt=""></RouterLink>
         
         <div class="card-text">
         <h2>{{quiz.name}}</h2>
