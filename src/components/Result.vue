@@ -18,8 +18,13 @@
           You answered <span class="correct-answers">{{ correctQuestions }}</span> out of 
           <span class="total-questions">{{ totalQuestions }}</span> questions correctly.
         </p>
-        
-      <button @click="retryQuiz" class="retry-button">Retry Quiz</button>
+        <div class="buttons">
+            <button @click="retryQuiz" class="retry-button">Retry Quiz</button>
+            <RouterLink to="/">
+                <button class="retry-button">Go back</button>
+            </RouterLink>
+        </div>  
+      
       </div>
     </div>
 
@@ -50,11 +55,13 @@
 
 .score-summary {
   margin-top: 20px;
+  
 }
 
 .score {
   font-size: 20px;
   color: #333;
+  margin-bottom: 20px;
 }
 
 .correct-answers {
@@ -67,26 +74,11 @@
   color: #333;
 }
 
-.performance-message {
-  font-size: 18px;
-  margin-top: 10px;
-}
-
-.performance-message.excellent {
-  color: #4caf50;
-  font-weight: bold;
-}
-
-.performance-message.great {
-  color: #ff9800;
-}
-
-.performance-message.good {
-  color: #2196f3;
-}
-
-.performance-message.try-again {
-  color: #f44336;
+.buttons{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    justify-items: center;
 }
 
 .retry-button {
@@ -104,4 +96,6 @@
 .retry-button:hover {
   background-color: #1976d2;
 }
+
+
 </style>

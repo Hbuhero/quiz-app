@@ -12,6 +12,7 @@
 
     const subjectId = parseInt(route.params.subjectId)
     const questions = quizes.find(quiz => quiz.id == subjectId).questions
+    
     // this is computed because the index is changed but the question is not state hence it doesnt
     // hence the computed function helps make the question be computed whenever the index is changes making it a state
     const question = computed(() =>questions.find(q => q.id == currentQuestionIndex.value))
