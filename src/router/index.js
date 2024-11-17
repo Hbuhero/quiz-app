@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Card from "@/components/Card.vue";
+import NotFoundView from "@/views/404View.vue";
 import Home from "@/views/Home.vue";
-import Question from "@/views/Question.vue";
+import QuizView from "@/views/QuizView.vue";
 import QuestionCard from "@/components/QuestionCard.vue";
 
 const router = createRouter({
@@ -13,15 +13,19 @@ const router = createRouter({
             component: Home
         },
         {
-            path: "/:subjectId/question",
+            path: "/home",
+            redirect: "/"  // redirects the path above to the path below
+        },
+        {
+            path: "/:subjectId/questions",
             name: "questions",
-            component: Question,
-            children: [
-                {
-                    path: ":questionId",
-                    component: QuestionCard
-                }
-            ]
+            component: QuizView,
+            
+        },
+        {
+            path: "/:catchall(.*)*",
+            name: "Not Found",
+            component: NotFoundView
         }
     ]
 })

@@ -1,80 +1,50 @@
 <script setup>
     import {RouterView, useRoute, useRouter} from "vue-router";
     import quizes from "../data/quizes.json"
-    import { ref } from "vue";
+    import QuestionCard from "@/components/QuestionCard.vue";
+    import Result from "@/components/Result.vue";
+    import { computed, ref } from "vue";
 
     const route = useRoute()
-    const router = useRouter()
-    const answers = ref(
-        [
-            {
-                questionId: 1,
-                optionId: 0,
-                isCorrect: false
-            }
-        ]
-    )
-    const result = ref(0)
+    const currentQuestionIndex = ref(1)
+    const correctQuestions = ref(0)
     
 
-    const subjectId = route.params.subjectId
-    let questionId = route.params.questionId
-    const questions = quizes.find(quiz => quiz.id == parseInt(subjectId)).questions
-    
-    console.log(questionId)
-    const saveAnswer = (question, option) => {
-        if (answers.value.find(answer => answer.questionId == question.id) === undefined){
-            let selectedOption = ({
-                questionId: question.id,
-                optionId: option.id,
-                isCorrect: option.isCorrect
-            })
-            answers.value.push(selectedOption)
-            
-            
-            
-        }else{
-            answers.value.find(answer => answer.questionId == question.id).optionId = option.id
-            answers.value.find(answer => answer.questionId == question.id).isCorrect = option.isCorrect
-            console.log(answers.value)
+    const subjectId = parseInt(route.params.subjectId)
+    const questions = quizes.find(quiz => quiz.id == subjectId).questions
+    // this is computed because the index is changed but the question is not state hence it doesnt
+    // hence the computed function helps make the question be computed whenever the index is changes making it a state
+    const question = computed(() =>questions.find(q => q.id == currentQuestionIndex.value))
+    const questionNumber = computed(() => `${currentQuestionIndex.value}/${questions.length}`)
+
+    const saveOption = (isCorrect) => {
+        currentQuestionIndex.value++
+        if(isCorrect){
+            correctQuestions.value++
         }
-       
-       
-         
-    }
-
-    const submit = () => {
-        if(answers.value.length < 3){
-            window.alert("answer all questions")
-            return
-        }
-        result.value = answers.value.filter(answer => answer.isCorrect == true).length
-        console.log(result.value);
-         
-    }
-
-    const next = () => {
-        return router.push(`/${subjectId}/question/${questionId++}`)
-    }
-
-    const previous = () => {
         
     }
+    
+    
 </script>
 
 <template>
     <main>
-        <header>
-            <p>Questions</p>
-        </header>
-            <RouterView />
-            <div class="buttons">
-                <button>Previous</button>
-                <button @click="next">Next</button>
+        <div class="quiz" v-if="currentQuestionIndex <= 3">
+            <header>
+                <p>Questions {{ questionNumber }}</p>
+            </header>
+            <div class="questions-container" >
+                <QuestionCard 
+                @selected-option="saveOption"
+                :question="question" />
             </div>
+        </div>
         
-        
-        
+        <div class="result" v-show="currentQuestionIndex > 3">
+            <Result :correctQuestions="correctQuestions" :totalQuestions="questions.length" />
+        </div>
+
     </main>
 </template>
 <style scoped>

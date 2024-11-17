@@ -1,23 +1,23 @@
 <script setup>
-    import {RouterView, useRoute, useRouter} from "vue-router";
-    import quizes from "../data/quizes.json"
-import { ref } from "vue";
+    import { defineProps, defineEmits } from 'vue';
 
-    const route = useRoute()
-    const router = useRouter()
-    
+    const {question} = defineProps(["question"])
+    const emit = defineEmits(["selectedOption"])
 
-    const subjectId = route.params.subjectId
-    const questionId = route.params.questionId
-    const question = quizes.find(quiz => quiz.id == parseInt(subjectId)).questions.find( question => question.id == parseInt(questionId))
+    const onSelectedOption = (isCorrect) => {
+        emit('selectedOption', isCorrect)
+        
+    }
 </script>
 
 <template>
-    <div class="question-card" :key="route.params.questionId">
+    <div class="question-card" :key="question.id">
                 <h1>{{ question.text }}</h1>
+
                 <div 
                 class="option-card" 
-                @click="saveAnswer(question, option)" v-for="option in question.options"
+                v-for="option in question.options"
+                @click="onSelectedOption(option.isCorrect)"
                 >
                     <p>{{ option.label }}:    {{ option.text }}</p>
                 </div>
